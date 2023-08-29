@@ -1,0 +1,16 @@
+  CREATE TABLE ProductModelIllustration(
+    ProductModelID INT NOT NULL,
+    IllustrationID INT NOT NULL,
+   )
+ALTER TABLE Production.ProductModelIllustration ADD
+    CONSTRAINT "PK_ProductModelIllustration_ProductModelID_IllustrationID" PRIMARY KEY
+    (ProductModelID, IllustrationID);
+CLUSTER Production.ProductModelIllustration USING "PK_ProductModelIllustration_ProductModelID_IllustrationID";
+
+ALTER TABLE Production.ProductModelIllustration ADD
+    CONSTRAINT "FK_ProductModelIllustration_ProductModel_ProductModelID" FOREIGN KEY
+    (ProductModelID) REFERENCES Production.ProductModel(ProductModelID);
+ALTER TABLE Production.ProductModelIllustration ADD
+    CONSTRAINT "FK_ProductModelIllustration_Illustration_IllustrationID" FOREIGN KEY
+    (IllustrationID) REFERENCES Production.Illustration(IllustrationID);
+

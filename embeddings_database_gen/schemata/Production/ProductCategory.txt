@@ -1,0 +1,10 @@
+  CREATE TABLE ProductCategory(
+    ProductCategoryID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_ProductCategory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Production.ProductCategory ADD
+    CONSTRAINT "PK_ProductCategory_ProductCategoryID" PRIMARY KEY
+    (ProductCategoryID);
+CLUSTER Production.ProductCategory USING "PK_ProductCategory_ProductCategoryID";
+

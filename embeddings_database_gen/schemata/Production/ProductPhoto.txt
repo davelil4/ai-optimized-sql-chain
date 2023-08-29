@@ -1,0 +1,12 @@
+  CREATE TABLE ProductPhoto(
+    ProductPhotoID SERIAL NOT NULL, -- int
+    ThumbNailPhoto bytea NULL,-- varbinary
+    ThumbnailPhotoFileName varchar(50) NULL,
+    LargePhoto bytea NULL,-- varbinary
+    LargePhotoFileName varchar(50) NULL,
+   )
+ALTER TABLE Production.ProductPhoto ADD
+    CONSTRAINT "PK_ProductPhoto_ProductPhotoID" PRIMARY KEY
+    (ProductPhotoID);
+CLUSTER Production.ProductPhoto USING "PK_ProductPhoto_ProductPhotoID";
+

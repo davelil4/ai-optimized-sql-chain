@@ -1,0 +1,10 @@
+  CREATE TABLE Location(
+    LocationID SERIAL NOT NULL, -- smallint
+    Name "Name" NOT NULL,
+    CostRate numeric NOT NULL CONSTRAINT "DF_Location_CostRate" DEFAULT (0.00), -- smallmoney -- money
+   )
+ALTER TABLE Production.Location ADD
+    CONSTRAINT "PK_Location_LocationID" PRIMARY KEY
+    (LocationID);
+CLUSTER Production.Location USING "PK_Location_LocationID";
+

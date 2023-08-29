@@ -1,0 +1,10 @@
+  CREATE TABLE ProductDescription(
+    ProductDescriptionID SERIAL NOT NULL, -- int
+    Description varchar(400) NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_ProductDescription_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Production.ProductDescription ADD
+    CONSTRAINT "PK_ProductDescription_ProductDescriptionID" PRIMARY KEY
+    (ProductDescriptionID);
+CLUSTER Production.ProductDescription USING "PK_ProductDescription_ProductDescriptionID";
+

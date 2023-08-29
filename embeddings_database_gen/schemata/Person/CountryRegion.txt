@@ -1,0 +1,9 @@
+  CREATE TABLE CountryRegion(
+    CountryRegionCode varchar(3) NOT NULL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Person.CountryRegion ADD
+    CONSTRAINT "PK_CountryRegion_CountryRegionCode" PRIMARY KEY
+    (CountryRegionCode);
+CLUSTER Person.CountryRegion USING "PK_CountryRegion_CountryRegionCode";
+

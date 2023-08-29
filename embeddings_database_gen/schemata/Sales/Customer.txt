@@ -1,0 +1,22 @@
+  CREATE TABLE Customer(
+    CustomerID SERIAL NOT NULL, --  NOT FOR REPLICATION -- int
+    -- A customer may either be a person, a store, or a person who works for a store
+    PersonID INT NULL, -- If this customer represents a person, this is non-null
+    StoreID INT NULL,  -- If the customer is a store, or is associated with a store then this is non-null.
+    TerritoryID INT NULL,
+   )
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "PK_Customer_CustomerID" PRIMARY KEY
+    (CustomerID);
+CLUSTER Sales.Customer USING "PK_Customer_CustomerID";
+
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "FK_Customer_Person_PersonID" FOREIGN KEY
+    (PersonID) REFERENCES Person.Person(BusinessEntityID);
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "FK_Customer_Store_StoreID" FOREIGN KEY
+    (StoreID) REFERENCES Sales.Store(BusinessEntityID);
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "FK_Customer_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+

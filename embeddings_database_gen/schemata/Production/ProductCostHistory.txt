@@ -1,0 +1,15 @@
+  CREATE TABLE ProductCostHistory(
+    ProductID INT NOT NULL,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate TIMESTAMP NULL,
+    StandardCost numeric NOT NULL,  -- money
+   )
+ALTER TABLE Production.ProductCostHistory ADD
+    CONSTRAINT "PK_ProductCostHistory_ProductID_StartDate" PRIMARY KEY
+    (ProductID, StartDate);
+CLUSTER Production.ProductCostHistory USING "PK_ProductCostHistory_ProductID_StartDate";
+
+ALTER TABLE Production.ProductCostHistory ADD
+    CONSTRAINT "FK_ProductCostHistory_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+

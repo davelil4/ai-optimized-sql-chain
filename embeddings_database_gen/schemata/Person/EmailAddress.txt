@@ -1,0 +1,15 @@
+  CREATE TABLE EmailAddress(
+    BusinessEntityID INT NOT NULL,
+    EmailAddressID SERIAL,
+    EmailAddress varchar(50) NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_EmailAddress_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.EmailAddress ADD
+    CONSTRAINT "PK_EmailAddress_BusinessEntityID_EmailAddressID" PRIMARY KEY
+    (BusinessEntityID, EmailAddressID);
+CLUSTER Person.EmailAddress USING "PK_EmailAddress_BusinessEntityID_EmailAddressID";
+
+ALTER TABLE Person.EmailAddress ADD
+    CONSTRAINT "FK_EmailAddress_Person_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.Person(BusinessEntityID);
+

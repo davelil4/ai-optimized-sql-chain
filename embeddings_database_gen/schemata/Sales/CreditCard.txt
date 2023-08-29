@@ -1,0 +1,12 @@
+  CREATE TABLE CreditCard(
+    CreditCardID SERIAL NOT NULL, -- int
+    CardType varchar(50) NOT NULL,
+    CardNumber varchar(25) NOT NULL,
+    ExpMonth smallint NOT NULL, -- tinyint
+    ExpYear smallint NOT NULL,
+   )
+ALTER TABLE Sales.CreditCard ADD
+    CONSTRAINT "PK_CreditCard_CreditCardID" PRIMARY KEY
+    (CreditCardID);
+CLUSTER Sales.CreditCard USING "PK_CreditCard_CreditCardID";
+

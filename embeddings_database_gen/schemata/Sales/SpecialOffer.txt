@@ -1,0 +1,14 @@
+  CREATE TABLE SpecialOffer(
+    SpecialOfferID SERIAL NOT NULL, -- int
+    Description varchar(255) NOT NULL,
+    DiscountPct numeric NOT NULL CONSTRAINT "DF_SpecialOffer_DiscountPct" DEFAULT (0.00), -- smallmoney -- money
+    Type varchar(50) NOT NULL,
+    Category varchar(50) NOT NULL,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate TIMESTAMP NOT NULL,
+   )
+ALTER TABLE Sales.SpecialOffer ADD
+    CONSTRAINT "PK_SpecialOffer_SpecialOfferID" PRIMARY KEY
+    (SpecialOfferID);
+CLUSTER Sales.SpecialOffer USING "PK_SpecialOffer_SpecialOfferID";
+

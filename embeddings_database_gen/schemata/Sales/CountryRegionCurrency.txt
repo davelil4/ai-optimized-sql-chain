@@ -1,0 +1,16 @@
+  CREATE TABLE CountryRegionCurrency(
+    CountryRegionCode varchar(3) NOT NULL,
+    CurrencyCode char(3) NOT NULL,
+   )
+ALTER TABLE Sales.CountryRegionCurrency ADD
+    CONSTRAINT "PK_CountryRegionCurrency_CountryRegionCode_CurrencyCode" PRIMARY KEY
+    (CountryRegionCode, CurrencyCode);
+CLUSTER Sales.CountryRegionCurrency USING "PK_CountryRegionCurrency_CountryRegionCode_CurrencyCode";
+
+ALTER TABLE Sales.CountryRegionCurrency ADD
+    CONSTRAINT "FK_CountryRegionCurrency_CountryRegion_CountryRegionCode" FOREIGN KEY
+    (CountryRegionCode) REFERENCES Person.CountryRegion(CountryRegionCode);
+ALTER TABLE Sales.CountryRegionCurrency ADD
+    CONSTRAINT "FK_CountryRegionCurrency_Currency_CurrencyCode" FOREIGN KEY
+    (CurrencyCode) REFERENCES Sales.Currency(CurrencyCode);
+

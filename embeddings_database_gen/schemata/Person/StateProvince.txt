@@ -1,0 +1,17 @@
+  CREATE TABLE StateProvince(
+    StateProvinceID SERIAL,
+    StateProvinceCode char(3) NOT NULL,
+    CountryRegionCode varchar(3) NOT NULL,
+   )
+ALTER TABLE Person.StateProvince ADD
+    CONSTRAINT "PK_StateProvince_StateProvinceID" PRIMARY KEY
+    (StateProvinceID);
+CLUSTER Person.StateProvince USING "PK_StateProvince_StateProvinceID";
+
+ALTER TABLE Person.StateProvince ADD
+    CONSTRAINT "FK_StateProvince_CountryRegion_CountryRegionCode" FOREIGN KEY
+    (CountryRegionCode) REFERENCES Person.CountryRegion(CountryRegionCode);
+ALTER TABLE Person.StateProvince ADD
+    CONSTRAINT "FK_StateProvince_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+

@@ -1,0 +1,9 @@
+  CREATE TABLE Culture(
+    CultureID char(6) NOT NULL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Production.Culture ADD
+    CONSTRAINT "PK_Culture_CultureID" PRIMARY KEY
+    (CultureID);
+CLUSTER Production.Culture USING "PK_Culture_CultureID";
+

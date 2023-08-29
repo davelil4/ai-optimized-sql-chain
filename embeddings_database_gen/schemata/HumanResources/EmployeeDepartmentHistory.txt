@@ -1,0 +1,22 @@
+  CREATE TABLE EmployeeDepartmentHistory(
+    BusinessEntityID INT NOT NULL,
+    DepartmentID smallint NOT NULL,
+    ShiftID smallint NOT NULL, -- tinyint
+    StartDate DATE NOT NULL,
+    EndDate DATE NULL,
+   )
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "PK_EmployeeDepartmentHistory_BusinessEntityID_StartDate_Departm" PRIMARY KEY
+    (BusinessEntityID, StartDate, DepartmentID, ShiftID);
+CLUSTER HumanResources.EmployeeDepartmentHistory USING "PK_EmployeeDepartmentHistory_BusinessEntityID_StartDate_Departm";
+
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "FK_EmployeeDepartmentHistory_Department_DepartmentID" FOREIGN KEY
+    (DepartmentID) REFERENCES HumanResources.Department(DepartmentID);
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "FK_EmployeeDepartmentHistory_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "FK_EmployeeDepartmentHistory_Shift_ShiftID" FOREIGN KEY
+    (ShiftID) REFERENCES HumanResources.Shift(ShiftID);
+

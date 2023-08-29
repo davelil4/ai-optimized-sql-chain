@@ -1,0 +1,14 @@
+  CREATE TABLE JobCandidate(
+    JobCandidateID SERIAL NOT NULL, -- int
+    BusinessEntityID INT NULL,
+    Resume XML NULL, -- XML(HRResumeSchemaCollection)
+   )
+ALTER TABLE HumanResources.JobCandidate ADD
+    CONSTRAINT "PK_JobCandidate_JobCandidateID" PRIMARY KEY
+    (JobCandidateID);
+CLUSTER HumanResources.JobCandidate USING "PK_JobCandidate_JobCandidateID";
+
+ALTER TABLE HumanResources.JobCandidate ADD
+    CONSTRAINT "FK_JobCandidate_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+

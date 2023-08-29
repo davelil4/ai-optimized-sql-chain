@@ -1,0 +1,27 @@
+  CREATE TABLE ProductVendor(
+    ProductID INT NOT NULL,
+    BusinessEntityID INT NOT NULL,
+    AverageLeadTime INT NOT NULL,
+    StandardPrice numeric NOT NULL, -- money
+    LastReceiptCost numeric NULL, -- money
+    LastReceiptDate TIMESTAMP NULL,
+    MinOrderQty INT NOT NULL,
+    MaxOrderQty INT NOT NULL,
+    OnOrderQty INT NULL,
+    UnitMeasureCode char(3) NOT NULL,
+   )
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "PK_ProductVendor_ProductID_BusinessEntityID" PRIMARY KEY
+    (ProductID, BusinessEntityID);
+CLUSTER Purchasing.ProductVendor USING "PK_ProductVendor_ProductID_BusinessEntityID";
+
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "FK_ProductVendor_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "FK_ProductVendor_UnitMeasure_UnitMeasureCode" FOREIGN KEY
+    (UnitMeasureCode) REFERENCES Production.UnitMeasure(UnitMeasureCode);
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "FK_ProductVendor_Vendor_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Purchasing.Vendor(BusinessEntityID);
+

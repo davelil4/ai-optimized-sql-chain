@@ -1,0 +1,15 @@
+  CREATE TABLE ProductSubcategory(
+    ProductSubcategoryID SERIAL NOT NULL, -- int
+    ProductCategoryID INT NOT NULL,
+    Name "Name" NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_ProductSubcategory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Production.ProductSubcategory ADD
+    CONSTRAINT "PK_ProductSubcategory_ProductSubcategoryID" PRIMARY KEY
+    (ProductSubcategoryID);
+CLUSTER Production.ProductSubcategory USING "PK_ProductSubcategory_ProductSubcategoryID";
+
+ALTER TABLE Production.ProductSubcategory ADD
+    CONSTRAINT "FK_ProductSubcategory_ProductCategory_ProductCategoryID" FOREIGN KEY
+    (ProductCategoryID) REFERENCES Production.ProductCategory(ProductCategoryID);
+

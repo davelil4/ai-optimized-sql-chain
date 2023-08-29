@@ -1,0 +1,17 @@
+  CREATE TABLE SalesTaxRate(
+    SalesTaxRateID SERIAL NOT NULL, -- int
+    StateProvinceID INT NOT NULL,
+    TaxType smallint NOT NULL, -- tinyint
+    TaxRate numeric NOT NULL CONSTRAINT "DF_SalesTaxRate_TaxRate" DEFAULT (0.00), -- smallmoney -- money
+    Name "Name" NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesTaxRate_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesTaxRate ADD
+    CONSTRAINT "PK_SalesTaxRate_SalesTaxRateID" PRIMARY KEY
+    (SalesTaxRateID);
+CLUSTER Sales.SalesTaxRate USING "PK_SalesTaxRate_SalesTaxRateID";
+
+ALTER TABLE Sales.SalesTaxRate ADD
+    CONSTRAINT "FK_SalesTaxRate_StateProvince_StateProvinceID" FOREIGN KEY
+    (StateProvinceID) REFERENCES Person.StateProvince(StateProvinceID);
+

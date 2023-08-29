@@ -1,0 +1,9 @@
+  CREATE TABLE ScrapReason(
+    ScrapReasonID SERIAL NOT NULL, -- smallint
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Production.ScrapReason ADD
+    CONSTRAINT "PK_ScrapReason_ScrapReasonID" PRIMARY KEY
+    (ScrapReasonID);
+CLUSTER Production.ScrapReason USING "PK_ScrapReason_ScrapReasonID";
+

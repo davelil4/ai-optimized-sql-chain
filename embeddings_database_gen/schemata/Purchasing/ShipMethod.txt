@@ -1,0 +1,12 @@
+  CREATE TABLE ShipMethod(
+    ShipMethodID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    ShipBase numeric NOT NULL CONSTRAINT "DF_ShipMethod_ShipBase" DEFAULT (0.00), -- money
+    ShipRate numeric NOT NULL CONSTRAINT "DF_ShipMethod_ShipRate" DEFAULT (0.00), -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_ShipMethod_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Purchasing.ShipMethod ADD
+    CONSTRAINT "PK_ShipMethod_ShipMethodID" PRIMARY KEY
+    (ShipMethodID);
+CLUSTER Purchasing.ShipMethod USING "PK_ShipMethod_ShipMethodID";
+

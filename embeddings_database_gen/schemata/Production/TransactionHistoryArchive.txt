@@ -1,0 +1,10 @@
+  CREATE TABLE TransactionHistoryArchive(
+    TransactionID INT NOT NULL,
+    ProductID INT NOT NULL,
+    ReferenceOrderID INT NOT NULL,
+   )
+ALTER TABLE Production.TransactionHistoryArchive ADD
+    CONSTRAINT "PK_TransactionHistoryArchive_TransactionID" PRIMARY KEY
+    (TransactionID);
+CLUSTER Production.TransactionHistoryArchive USING "PK_TransactionHistoryArchive_TransactionID";
+

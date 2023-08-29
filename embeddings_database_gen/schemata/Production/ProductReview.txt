@@ -1,0 +1,14 @@
+  CREATE TABLE ProductReview(
+    ProductReviewID SERIAL NOT NULL, -- int
+    ProductID INT NOT NULL,
+    ReviewerName "Name" NOT NULL,
+   )
+ALTER TABLE Production.ProductReview ADD
+    CONSTRAINT "PK_ProductReview_ProductReviewID" PRIMARY KEY
+    (ProductReviewID);
+CLUSTER Production.ProductReview USING "PK_ProductReview_ProductReviewID";
+
+ALTER TABLE Production.ProductReview ADD
+    CONSTRAINT "FK_ProductReview_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+

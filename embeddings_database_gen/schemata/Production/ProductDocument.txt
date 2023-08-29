@@ -1,0 +1,16 @@
+  CREATE TABLE ProductDocument(
+    ProductID INT NOT NULL,
+    Doc varchar NOT NULL, -- hierarchyid, will become DocumentNode
+   )
+ALTER TABLE Production.ProductDocument ADD
+    CONSTRAINT "PK_ProductDocument_ProductID_DocumentNode" PRIMARY KEY
+    (ProductID, DocumentNode);
+CLUSTER Production.ProductDocument USING "PK_ProductDocument_ProductID_DocumentNode";
+
+ALTER TABLE Production.ProductDocument ADD
+    CONSTRAINT "FK_ProductDocument_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Production.ProductDocument ADD
+    CONSTRAINT "FK_ProductDocument_Document_DocumentNode" FOREIGN KEY
+    (DocumentNode) REFERENCES Production.Document(DocumentNode);
+

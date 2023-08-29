@@ -1,0 +1,15 @@
+  CREATE TABLE EmployeePayHistory(
+    BusinessEntityID INT NOT NULL,
+    RateChangeDate TIMESTAMP NOT NULL,
+    Rate numeric NOT NULL, -- money
+    PayFrequency smallint NOT NULL,  -- tinyint
+   )
+ALTER TABLE HumanResources.EmployeePayHistory ADD
+    CONSTRAINT "PK_EmployeePayHistory_BusinessEntityID_RateChangeDate" PRIMARY KEY
+    (BusinessEntityID, RateChangeDate);
+CLUSTER HumanResources.EmployeePayHistory USING "PK_EmployeePayHistory_BusinessEntityID_RateChangeDate";
+
+ALTER TABLE HumanResources.EmployeePayHistory ADD
+    CONSTRAINT "FK_EmployeePayHistory_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+

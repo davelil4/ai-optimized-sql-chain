@@ -1,0 +1,20 @@
+  CREATE TABLE SalesTerritory(
+    TerritoryID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    CountryRegionCode varchar(3) NOT NULL,
+    "group" varchar(50) NOT NULL, -- Group
+    SalesYTD numeric NOT NULL CONSTRAINT "DF_SalesTerritory_SalesYTD" DEFAULT (0.00), -- money
+    SalesLastYear numeric NOT NULL CONSTRAINT "DF_SalesTerritory_SalesLastYear" DEFAULT (0.00), -- money
+    CostYTD numeric NOT NULL CONSTRAINT "DF_SalesTerritory_CostYTD" DEFAULT (0.00), -- money
+    CostLastYear numeric NOT NULL CONSTRAINT "DF_SalesTerritory_CostLastYear" DEFAULT (0.00), -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesTerritory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesTerritory ADD
+    CONSTRAINT "PK_SalesTerritory_TerritoryID" PRIMARY KEY
+    (TerritoryID);
+CLUSTER Sales.SalesTerritory USING "PK_SalesTerritory_TerritoryID";
+
+ALTER TABLE Sales.SalesTerritory ADD
+    CONSTRAINT "FK_SalesTerritory_CountryRegion_CountryRegionCode" FOREIGN KEY
+    (CountryRegionCode) REFERENCES Person.CountryRegion(CountryRegionCode);
+

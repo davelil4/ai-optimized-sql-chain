@@ -1,0 +1,11 @@
+  CREATE TABLE Shift(
+    ShiftID SERIAL NOT NULL, -- tinyint
+    Name "Name" NOT NULL,
+    StartTime time NOT NULL,
+    EndTime time NOT NULL,
+   )
+ALTER TABLE HumanResources.Shift ADD
+    CONSTRAINT "PK_Shift_ShiftID" PRIMARY KEY
+    (ShiftID);
+CLUSTER HumanResources.Shift USING "PK_Shift_ShiftID";
+

@@ -1,0 +1,20 @@
+  CREATE TABLE CurrencyRate(
+    CurrencyRateID SERIAL NOT NULL, -- int
+    CurrencyRateDate TIMESTAMP NOT NULL,   
+    FromCurrencyCode char(3) NOT NULL,
+    ToCurrencyCode char(3) NOT NULL,
+    AverageRate numeric NOT NULL, -- money
+    EndOfDayRate numeric NOT NULL,  -- money
+   )
+ALTER TABLE Sales.CurrencyRate ADD
+    CONSTRAINT "PK_CurrencyRate_CurrencyRateID" PRIMARY KEY
+    (CurrencyRateID);
+CLUSTER Sales.CurrencyRate USING "PK_CurrencyRate_CurrencyRateID";
+
+ALTER TABLE Sales.CurrencyRate ADD
+    CONSTRAINT "FK_CurrencyRate_Currency_FromCurrencyCode" FOREIGN KEY
+    (FromCurrencyCode) REFERENCES Sales.Currency(CurrencyCode);
+ALTER TABLE Sales.CurrencyRate ADD
+    CONSTRAINT "FK_CurrencyRate_Currency_ToCurrencyCode" FOREIGN KEY
+    (ToCurrencyCode) REFERENCES Sales.Currency(CurrencyCode);
+

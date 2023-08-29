@@ -1,0 +1,23 @@
+  CREATE TABLE PurchaseOrderHeader(
+    PurchaseOrderID SERIAL NOT NULL,  -- int
+    RevisionNumber smallint NOT NULL CONSTRAINT "DF_PurchaseOrderHeader_RevisionNumber" DEFAULT (0),  -- tinyint
+    Status smallint NOT NULL CONSTRAINT "DF_PurchaseOrderHeader_Status" DEFAULT (1),  -- tinyint
+    EmployeeID INT NOT NULL,
+    VendorID INT NOT NULL,
+    ShipMethodID INT NOT NULL,
+   )
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "PK_PurchaseOrderHeader_PurchaseOrderID" PRIMARY KEY
+    (PurchaseOrderID);
+CLUSTER Purchasing.PurchaseOrderHeader USING "PK_PurchaseOrderHeader_PurchaseOrderID";
+
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "FK_PurchaseOrderHeader_Employee_EmployeeID" FOREIGN KEY
+    (EmployeeID) REFERENCES HumanResources.Employee(BusinessEntityID);
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "FK_PurchaseOrderHeader_Vendor_VendorID" FOREIGN KEY
+    (VendorID) REFERENCES Purchasing.Vendor(BusinessEntityID);
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "FK_PurchaseOrderHeader_ShipMethod_ShipMethodID" FOREIGN KEY
+    (ShipMethodID) REFERENCES Purchasing.ShipMethod(ShipMethodID);
+

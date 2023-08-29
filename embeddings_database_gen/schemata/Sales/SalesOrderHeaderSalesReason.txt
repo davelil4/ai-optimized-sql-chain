@@ -1,0 +1,16 @@
+  CREATE TABLE SalesOrderHeaderSalesReason(
+    SalesOrderID INT NOT NULL,
+    SalesReasonID INT NOT NULL,
+   )
+ALTER TABLE Sales.SalesOrderHeaderSalesReason ADD
+    CONSTRAINT "PK_SalesOrderHeaderSalesReason_SalesOrderID_SalesReasonID" PRIMARY KEY
+    (SalesOrderID, SalesReasonID);
+CLUSTER Sales.SalesOrderHeaderSalesReason USING "PK_SalesOrderHeaderSalesReason_SalesOrderID_SalesReasonID";
+
+ALTER TABLE Sales.SalesOrderHeaderSalesReason ADD
+    CONSTRAINT "FK_SalesOrderHeaderSalesReason_SalesReason_SalesReasonID" FOREIGN KEY
+    (SalesReasonID) REFERENCES Sales.SalesReason(SalesReasonID);
+ALTER TABLE Sales.SalesOrderHeaderSalesReason ADD
+    CONSTRAINT "FK_SalesOrderHeaderSalesReason_SalesOrderHeader_SalesOrderID" FOREIGN KEY
+    (SalesOrderID) REFERENCES Sales.SalesOrderHeader(SalesOrderID) ON DELETE CASCADE;
+

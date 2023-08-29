@@ -1,0 +1,20 @@
+  CREATE TABLE ProductModelProductDescriptionCulture(
+    ProductModelID INT NOT NULL,
+    ProductDescriptionID INT NOT NULL,
+    CultureID char(6) NOT NULL,
+   )
+ALTER TABLE Production.ProductModelProductDescriptionCulture ADD
+    CONSTRAINT "PK_ProductModelProductDescriptionCulture_ProductModelID_Product" PRIMARY KEY
+    (ProductModelID, ProductDescriptionID, CultureID);
+CLUSTER Production.ProductModelProductDescriptionCulture USING "PK_ProductModelProductDescriptionCulture_ProductModelID_Product";
+
+ALTER TABLE Production.ProductModelProductDescriptionCulture ADD
+    CONSTRAINT "FK_ProductModelProductDescriptionCulture_ProductDescription_Pro" FOREIGN KEY
+    (ProductDescriptionID) REFERENCES Production.ProductDescription(ProductDescriptionID);
+ALTER TABLE Production.ProductModelProductDescriptionCulture ADD
+    CONSTRAINT "FK_ProductModelProductDescriptionCulture_Culture_CultureID" FOREIGN KEY
+    (CultureID) REFERENCES Production.Culture(CultureID);
+ALTER TABLE Production.ProductModelProductDescriptionCulture ADD
+    CONSTRAINT "FK_ProductModelProductDescriptionCulture_ProductModel_ProductMo" FOREIGN KEY
+    (ProductModelID) REFERENCES Production.ProductModel(ProductModelID);
+

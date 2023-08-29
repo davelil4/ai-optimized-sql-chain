@@ -1,0 +1,17 @@
+  CREATE TABLE WorkOrder(
+    WorkOrderID SERIAL NOT NULL, -- int
+    ProductID INT NOT NULL,
+    OrderQty INT NOT NULL,
+   )
+ALTER TABLE Production.WorkOrder ADD
+    CONSTRAINT "PK_WorkOrder_WorkOrderID" PRIMARY KEY
+    (WorkOrderID);
+CLUSTER Production.WorkOrder USING "PK_WorkOrder_WorkOrderID";
+
+ALTER TABLE Production.WorkOrder ADD
+    CONSTRAINT "FK_WorkOrder_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Production.WorkOrder ADD
+    CONSTRAINT "FK_WorkOrder_ScrapReason_ScrapReasonID" FOREIGN KEY
+    (ScrapReasonID) REFERENCES Production.ScrapReason(ScrapReasonID);
+

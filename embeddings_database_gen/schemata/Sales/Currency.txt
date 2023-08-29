@@ -1,0 +1,9 @@
+  CREATE TABLE Currency(
+    CurrencyCode char(3) NOT NULL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Sales.Currency ADD
+    CONSTRAINT "PK_Currency_CurrencyCode" PRIMARY KEY
+    (CurrencyCode);
+CLUSTER Sales.Currency USING "PK_Currency_CurrencyCode";
+

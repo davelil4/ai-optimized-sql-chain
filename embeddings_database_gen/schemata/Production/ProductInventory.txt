@@ -1,0 +1,18 @@
+  CREATE TABLE ProductInventory(
+    ProductID INT NOT NULL,
+    LocationID smallint NOT NULL,
+    Shelf varchar(10) NOT NULL,
+    Bin smallint NOT NULL, -- tinyint
+   )
+ALTER TABLE Production.ProductInventory ADD
+    CONSTRAINT "PK_ProductInventory_ProductID_LocationID" PRIMARY KEY
+    (ProductID, LocationID);
+CLUSTER Production.ProductInventory USING "PK_ProductInventory_ProductID_LocationID";
+
+ALTER TABLE Production.ProductInventory ADD
+    CONSTRAINT "FK_ProductInventory_Location_LocationID" FOREIGN KEY
+    (LocationID) REFERENCES Production.Location(LocationID);
+ALTER TABLE Production.ProductInventory ADD
+    CONSTRAINT "FK_ProductInventory_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+

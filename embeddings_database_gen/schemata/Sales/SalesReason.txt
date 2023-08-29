@@ -1,0 +1,10 @@
+  CREATE TABLE SalesReason(
+    SalesReasonID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    ReasonType "Name" NOT NULL,
+   )
+ALTER TABLE Sales.SalesReason ADD
+    CONSTRAINT "PK_SalesReason_SalesReasonID" PRIMARY KEY
+    (SalesReasonID);
+CLUSTER Sales.SalesReason USING "PK_SalesReason_SalesReasonID";
+

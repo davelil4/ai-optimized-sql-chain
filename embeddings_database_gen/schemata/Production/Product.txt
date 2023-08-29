@@ -1,0 +1,23 @@
+  CREATE TABLE Product(
+    ProductID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    ProductNumber varchar(25) NOT NULL,
+   )
+ALTER TABLE Production.Product ADD
+    CONSTRAINT "PK_Product_ProductID" PRIMARY KEY
+    (ProductID);
+CLUSTER Production.Product USING "PK_Product_ProductID";
+
+ALTER TABLE Production.Product ADD
+    CONSTRAINT "FK_Product_UnitMeasure_SizeUnitMeasureCode" FOREIGN KEY
+    (SizeUnitMeasureCode) REFERENCES Production.UnitMeasure(UnitMeasureCode);
+ALTER TABLE Production.Product ADD
+    CONSTRAINT "FK_Product_UnitMeasure_WeightUnitMeasureCode" FOREIGN KEY
+    (WeightUnitMeasureCode) REFERENCES Production.UnitMeasure(UnitMeasureCode);
+ALTER TABLE Production.Product ADD
+    CONSTRAINT "FK_Product_ProductModel_ProductModelID" FOREIGN KEY
+    (ProductModelID) REFERENCES Production.ProductModel(ProductModelID);
+ALTER TABLE Production.Product ADD
+    CONSTRAINT "FK_Product_ProductSubcategory_ProductSubcategoryID" FOREIGN KEY
+    (ProductSubcategoryID) REFERENCES Production.ProductSubcategory(ProductSubcategoryID);
+

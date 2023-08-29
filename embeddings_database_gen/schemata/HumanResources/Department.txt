@@ -1,0 +1,10 @@
+  CREATE TABLE Department(
+    DepartmentID SERIAL NOT NULL, -- smallint
+    Name "Name" NOT NULL,
+    GroupName "Name" NOT NULL,
+   )
+ALTER TABLE HumanResources.Department ADD
+    CONSTRAINT "PK_Department_DepartmentID" PRIMARY KEY
+    (DepartmentID);
+CLUSTER HumanResources.Department USING "PK_Department_DepartmentID";
+

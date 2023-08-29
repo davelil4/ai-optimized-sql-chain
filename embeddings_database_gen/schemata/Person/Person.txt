@@ -1,0 +1,13 @@
+  CREATE TABLE Person(
+    BusinessEntityID INT NOT NULL,
+    PersonType char(2) NOT NULL,
+   )
+ALTER TABLE Person.Person ADD
+    CONSTRAINT "PK_Person_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Person.Person USING "PK_Person_BusinessEntityID";
+
+ALTER TABLE Person.Person ADD
+    CONSTRAINT "FK_Person_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+

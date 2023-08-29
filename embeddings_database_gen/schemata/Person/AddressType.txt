@@ -1,0 +1,10 @@
+  CREATE TABLE AddressType(
+    AddressTypeID SERIAL,
+    Name "Name" NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_AddressType_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.AddressType ADD
+    CONSTRAINT "PK_AddressType_AddressTypeID" PRIMARY KEY
+    (AddressTypeID);
+CLUSTER Person.AddressType USING "PK_AddressType_AddressTypeID";
+

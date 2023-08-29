@@ -1,0 +1,9 @@
+  CREATE TABLE Illustration(
+    IllustrationID SERIAL NOT NULL, -- int
+    Diagram XML NULL,
+   )
+ALTER TABLE Production.Illustration ADD
+    CONSTRAINT "PK_Illustration_IllustrationID" PRIMARY KEY
+    (IllustrationID);
+CLUSTER Production.Illustration USING "PK_Illustration_IllustrationID";
+

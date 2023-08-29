@@ -1,0 +1,9 @@
+  CREATE TABLE ContactType(
+    ContactTypeID SERIAL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Person.ContactType ADD
+    CONSTRAINT "PK_ContactType_ContactTypeID" PRIMARY KEY
+    (ContactTypeID);
+CLUSTER Person.ContactType USING "PK_ContactType_ContactTypeID";
+

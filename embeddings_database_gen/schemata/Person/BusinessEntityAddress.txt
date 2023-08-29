@@ -1,0 +1,21 @@
+  CREATE TABLE BusinessEntityAddress(
+    BusinessEntityID INT NOT NULL,
+    AddressID INT NOT NULL,
+    AddressTypeID INT NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_BusinessEntityAddress_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "PK_BusinessEntityAddress_BusinessEntityID_AddressID_AddressType" PRIMARY KEY
+    (BusinessEntityID, AddressID, AddressTypeID);
+CLUSTER Person.BusinessEntityAddress USING "PK_BusinessEntityAddress_BusinessEntityID_AddressID_AddressType";
+
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "FK_BusinessEntityAddress_Address_AddressID" FOREIGN KEY
+    (AddressID) REFERENCES Person.Address(AddressID);
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "FK_BusinessEntityAddress_AddressType_AddressTypeID" FOREIGN KEY
+    (AddressTypeID) REFERENCES Person.AddressType(AddressTypeID);
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "FK_BusinessEntityAddress_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+

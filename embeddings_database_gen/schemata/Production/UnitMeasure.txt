@@ -1,0 +1,9 @@
+  CREATE TABLE UnitMeasure(
+    UnitMeasureCode char(3) NOT NULL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Production.UnitMeasure ADD
+    CONSTRAINT "PK_UnitMeasure_UnitMeasureCode" PRIMARY KEY
+    (UnitMeasureCode);
+CLUSTER Production.UnitMeasure USING "PK_UnitMeasure_UnitMeasureCode";
+

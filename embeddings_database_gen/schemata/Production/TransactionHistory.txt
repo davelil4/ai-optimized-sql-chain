@@ -1,0 +1,14 @@
+  CREATE TABLE TransactionHistory(
+    TransactionID SERIAL NOT NULL, -- INT IDENTITY (100000, 1)
+    ProductID INT NOT NULL,
+    ReferenceOrderID INT NOT NULL,
+   )
+ALTER TABLE Production.TransactionHistory ADD
+    CONSTRAINT "PK_TransactionHistory_TransactionID" PRIMARY KEY
+    (TransactionID);
+CLUSTER Production.TransactionHistory USING "PK_TransactionHistory_TransactionID";
+
+ALTER TABLE Production.TransactionHistory ADD
+    CONSTRAINT "FK_TransactionHistory_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+

@@ -1,0 +1,22 @@
+  CREATE TABLE SalesOrderDetail(
+    SalesOrderID INT NOT NULL,
+    SalesOrderDetailID SERIAL NOT NULL, -- int
+    CarrierTrackingNumber varchar(25) NULL,
+    OrderQty smallint NOT NULL,
+    ProductID INT NOT NULL,
+    SpecialOfferID INT NOT NULL,
+    UnitPrice numeric NOT NULL, -- money
+    UnitPriceDiscount numeric NOT NULL CONSTRAINT "DF_SalesOrderDetail_UnitPriceDiscount" DEFAULT (0.0), -- money
+   )
+ALTER TABLE Sales.SalesOrderDetail ADD
+    CONSTRAINT "PK_SalesOrderDetail_SalesOrderID_SalesOrderDetailID" PRIMARY KEY
+    (SalesOrderID, SalesOrderDetailID);
+CLUSTER Sales.SalesOrderDetail USING "PK_SalesOrderDetail_SalesOrderID_SalesOrderDetailID";
+
+ALTER TABLE Sales.SalesOrderDetail ADD
+    CONSTRAINT "FK_SalesOrderDetail_SalesOrderHeader_SalesOrderID" FOREIGN KEY
+    (SalesOrderID) REFERENCES Sales.SalesOrderHeader(SalesOrderID) ON DELETE CASCADE;
+ALTER TABLE Sales.SalesOrderDetail ADD
+    CONSTRAINT "FK_SalesOrderDetail_SpecialOfferProduct_SpecialOfferIDProductID" FOREIGN KEY
+    (SpecialOfferID, ProductID) REFERENCES Sales.SpecialOfferProduct(SpecialOfferID, ProductID);
+

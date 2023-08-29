@@ -1,0 +1,34 @@
+  CREATE TABLE WorkOrderRouting(
+    WorkOrderID INT NOT NULL,
+    ProductID INT NOT NULL,
+    OperationSequence smallint NOT NULL,
+    LocationID smallint NOT NULL,
+    ScheduledStartDate TIMESTAMP NOT NULL,
+    ScheduledEndDate TIMESTAMP NOT NULL,
+    ActualStartDate TIMESTAMP NULL,
+    ActualEndDate TIMESTAMP NULL,
+    ActualResourceHrs decimal(9, 4) NULL,
+    PlannedCost numeric NOT NULL, -- money
+    ActualCost numeric NULL,  -- money
+   )
+ALTER TABLE Production.WorkOrderRouting ADD
+    CONSTRAINT "PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequence" PRIMARY KEY
+    (WorkOrderID, ProductID, OperationSequence);
+CLUSTER Production.WorkOrderRouting USING "PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequence";
+
+
+
+-------------------------------------
+-- FOREIGN KEYS
+-------------------------------------
+
+ALTER TABLE Production.WorkOrderRouting ADD
+    CONSTRAINT "FK_WorkOrderRouting_Location_LocationID" FOREIGN KEY
+    (LocationID) REFERENCES Production.Location(LocationID);
+ALTER TABLE Production.WorkOrderRouting ADD
+    CONSTRAINT "FK_WorkOrderRouting_WorkOrder_WorkOrderID" FOREIGN KEY
+    (WorkOrderID) REFERENCES Production.WorkOrder(WorkOrderID);
+
+
+
+-------------------------------------

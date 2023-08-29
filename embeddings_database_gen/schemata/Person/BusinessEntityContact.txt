@@ -1,0 +1,21 @@
+  CREATE TABLE BusinessEntityContact(
+    BusinessEntityID INT NOT NULL,
+    PersonID INT NOT NULL,
+    ContactTypeID INT NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_BusinessEntityContact_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "PK_BusinessEntityContact_BusinessEntityID_PersonID_ContactTypeI" PRIMARY KEY
+    (BusinessEntityID, PersonID, ContactTypeID);
+CLUSTER Person.BusinessEntityContact USING "PK_BusinessEntityContact_BusinessEntityID_PersonID_ContactTypeI";
+
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "FK_BusinessEntityContact_Person_PersonID" FOREIGN KEY
+    (PersonID) REFERENCES Person.Person(BusinessEntityID);
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "FK_BusinessEntityContact_ContactType_ContactTypeID" FOREIGN KEY
+    (ContactTypeID) REFERENCES Person.ContactType(ContactTypeID);
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "FK_BusinessEntityContact_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+

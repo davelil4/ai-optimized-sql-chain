@@ -1,0 +1,13 @@
+  CREATE TABLE ShoppingCartItem(
+    ShoppingCartItemID SERIAL NOT NULL, -- int
+    ShoppingCartID varchar(50) NOT NULL,
+   )
+ALTER TABLE Sales.ShoppingCartItem ADD
+    CONSTRAINT "PK_ShoppingCartItem_ShoppingCartItemID" PRIMARY KEY
+    (ShoppingCartItemID);
+CLUSTER Sales.ShoppingCartItem USING "PK_ShoppingCartItem_ShoppingCartItemID";
+
+ALTER TABLE Sales.ShoppingCartItem ADD
+    CONSTRAINT "FK_ShoppingCartItem_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+

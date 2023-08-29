@@ -1,0 +1,15 @@
+  CREATE TABLE Vendor(
+    BusinessEntityID INT NOT NULL,
+    AccountNumber "AccountNumber" NOT NULL,
+    Name "Name" NOT NULL,
+    CreditRating smallint NOT NULL, -- tinyint
+   )
+ALTER TABLE Purchasing.Vendor ADD
+    CONSTRAINT "PK_Vendor_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Purchasing.Vendor USING "PK_Vendor_BusinessEntityID";
+
+ALTER TABLE Purchasing.Vendor ADD
+    CONSTRAINT "FK_Vendor_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+

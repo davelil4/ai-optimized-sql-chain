@@ -1,0 +1,34 @@
+  CREATE TABLE SalesOrderHeader(
+    SalesOrderID SERIAL NOT NULL, --  NOT FOR REPLICATION -- int
+    RevisionNumber smallint NOT NULL CONSTRAINT "DF_SalesOrderHeader_RevisionNumber" DEFAULT (0), -- tinyint
+   )
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "PK_SalesOrderHeader_SalesOrderID" PRIMARY KEY
+    (SalesOrderID);
+CLUSTER Sales.SalesOrderHeader USING "PK_SalesOrderHeader_SalesOrderID";
+
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_Address_BillToAddressID" FOREIGN KEY
+    (BillToAddressID) REFERENCES Person.Address(AddressID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_Address_ShipToAddressID" FOREIGN KEY
+    (ShipToAddressID) REFERENCES Person.Address(AddressID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_CreditCard_CreditCardID" FOREIGN KEY
+    (CreditCardID) REFERENCES Sales.CreditCard(CreditCardID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_CurrencyRate_CurrencyRateID" FOREIGN KEY
+    (CurrencyRateID) REFERENCES Sales.CurrencyRate(CurrencyRateID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_Customer_CustomerID" FOREIGN KEY
+    (CustomerID) REFERENCES Sales.Customer(CustomerID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_SalesPerson_SalesPersonID" FOREIGN KEY
+    (SalesPersonID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_ShipMethod_ShipMethodID" FOREIGN KEY
+    (ShipMethodID) REFERENCES Purchasing.ShipMethod(ShipMethodID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+

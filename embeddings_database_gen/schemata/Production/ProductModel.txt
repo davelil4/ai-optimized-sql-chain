@@ -1,0 +1,12 @@
+  CREATE TABLE ProductModel(
+    ProductModelID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    CatalogDescription XML NULL, -- XML(Production.ProductDescriptionSchemaCollection)
+    Instructions XML NULL, -- XML(Production.ManuInstructionsSchemaCollection)
+    rowguid uuid NOT NULL CONSTRAINT "DF_ProductModel_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Production.ProductModel ADD
+    CONSTRAINT "PK_ProductModel_ProductModelID" PRIMARY KEY
+    (ProductModelID);
+CLUSTER Production.ProductModel USING "PK_ProductModel_ProductModelID";
+

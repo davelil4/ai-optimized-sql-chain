@@ -1,0 +1,15 @@
+  CREATE TABLE SalesPersonQuotaHistory(
+    BusinessEntityID INT NOT NULL,
+    QuotaDate TIMESTAMP NOT NULL,
+    SalesQuota numeric NOT NULL, -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesPersonQuotaHistory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesPersonQuotaHistory ADD
+    CONSTRAINT "PK_SalesPersonQuotaHistory_BusinessEntityID_QuotaDate" PRIMARY KEY
+    (BusinessEntityID, QuotaDate); -- ProductCategoryID);
+CLUSTER Sales.SalesPersonQuotaHistory USING "PK_SalesPersonQuotaHistory_BusinessEntityID_QuotaDate";
+
+ALTER TABLE Sales.SalesPersonQuotaHistory ADD
+    CONSTRAINT "FK_SalesPersonQuotaHistory_SalesPerson_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+

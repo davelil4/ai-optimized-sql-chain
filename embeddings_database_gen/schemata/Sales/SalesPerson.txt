@@ -1,0 +1,22 @@
+  CREATE TABLE SalesPerson(
+    BusinessEntityID INT NOT NULL,
+    TerritoryID INT NULL,
+    SalesQuota numeric NULL, -- money
+    Bonus numeric NOT NULL CONSTRAINT "DF_SalesPerson_Bonus" DEFAULT (0.00), -- money
+    CommissionPct numeric NOT NULL CONSTRAINT "DF_SalesPerson_CommissionPct" DEFAULT (0.00), -- smallmoney -- money
+    SalesYTD numeric NOT NULL CONSTRAINT "DF_SalesPerson_SalesYTD" DEFAULT (0.00), -- money
+    SalesLastYear numeric NOT NULL CONSTRAINT "DF_SalesPerson_SalesLastYear" DEFAULT (0.00), -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesPerson_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesPerson ADD
+    CONSTRAINT "PK_SalesPerson_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Sales.SalesPerson USING "PK_SalesPerson_BusinessEntityID";
+
+ALTER TABLE Sales.SalesPerson ADD
+    CONSTRAINT "FK_SalesPerson_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+ALTER TABLE Sales.SalesPerson ADD
+    CONSTRAINT "FK_SalesPerson_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+

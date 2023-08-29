@@ -1,0 +1,20 @@
+  CREATE TABLE SalesTerritoryHistory(
+    BusinessEntityID INT NOT NULL,  -- A sales person
+    TerritoryID INT NOT NULL,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate TIMESTAMP NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesTerritoryHistory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesTerritoryHistory ADD
+    CONSTRAINT "PK_SalesTerritoryHistory_BusinessEntityID_StartDate_TerritoryID" PRIMARY KEY
+    (BusinessEntityID,  --Sales person,
+     StartDate, TerritoryID);
+CLUSTER Sales.SalesTerritoryHistory USING "PK_SalesTerritoryHistory_BusinessEntityID_StartDate_TerritoryID";
+
+ALTER TABLE Sales.SalesTerritoryHistory ADD
+    CONSTRAINT "FK_SalesTerritoryHistory_SalesPerson_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+ALTER TABLE Sales.SalesTerritoryHistory ADD
+    CONSTRAINT "FK_SalesTerritoryHistory_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+

@@ -1,0 +1,9 @@
+  CREATE TABLE BusinessEntity(
+    BusinessEntityID SERIAL, --  NOT FOR REPLICATION
+    rowguid uuid NOT NULL CONSTRAINT "DF_BusinessEntity_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.BusinessEntity ADD
+    CONSTRAINT "PK_BusinessEntity_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Person.BusinessEntity USING "PK_BusinessEntity_BusinessEntityID";
+

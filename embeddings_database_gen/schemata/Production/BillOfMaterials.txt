@@ -1,0 +1,19 @@
+  CREATE TABLE BillOfMaterials(
+    BillOfMaterialsID SERIAL NOT NULL, -- int
+    ProductAssemblyID INT NULL,
+    ComponentID INT NOT NULL,
+   )
+ALTER TABLE Production.BillOfMaterials ADD
+    CONSTRAINT "PK_BillOfMaterials_BillOfMaterialsID" PRIMARY KEY
+    (BillOfMaterialsID);
+
+ALTER TABLE Production.BillOfMaterials ADD
+    CONSTRAINT "FK_BillOfMaterials_Product_ProductAssemblyID" FOREIGN KEY
+    (ProductAssemblyID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Production.BillOfMaterials ADD
+    CONSTRAINT "FK_BillOfMaterials_Product_ComponentID" FOREIGN KEY
+    (ComponentID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Production.BillOfMaterials ADD
+    CONSTRAINT "FK_BillOfMaterials_UnitMeasure_UnitMeasureCode" FOREIGN KEY
+    (UnitMeasureCode) REFERENCES Production.UnitMeasure(UnitMeasureCode);
+

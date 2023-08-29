@@ -1,0 +1,12 @@
+  CREATE TABLE Document(
+    Doc varchar NULL,-- hierarchyid, will become DocumentNode
+   )
+ALTER TABLE Production.Document ADD
+    CONSTRAINT "PK_Document_DocumentNode" PRIMARY KEY
+    (DocumentNode);
+CLUSTER Production.Document USING "PK_Document_DocumentNode";
+
+ALTER TABLE Production.Document ADD
+    CONSTRAINT "FK_Document_Employee_Owner" FOREIGN KEY
+    (Owner) REFERENCES HumanResources.Employee(BusinessEntityID);
+
