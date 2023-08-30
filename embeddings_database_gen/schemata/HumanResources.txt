@@ -1,4 +1,4 @@
-  CREATE TABLE EmployeeDepartmentHistory(
+CREATE TABLE EmployeeDepartmentHistory(
     BusinessEntityID INT NOT NULL,
     DepartmentID smallint NOT NULL,
     ShiftID smallint NOT NULL, -- tinyint

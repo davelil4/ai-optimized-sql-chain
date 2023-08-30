@@ -1,4 +1,4 @@
-  CREATE TABLE ContactType(
+CREATE TABLE ContactType(
     ContactTypeID SERIAL,
     Name "Name" NOT NULL,
    )

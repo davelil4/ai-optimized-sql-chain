@@ -1,4 +1,4 @@
-  CREATE TABLE Vendor(
+CREATE TABLE Vendor(
     BusinessEntityID INT NOT NULL,
     AccountNumber "AccountNumber" NOT NULL,
     Name "Name" NOT NULL,

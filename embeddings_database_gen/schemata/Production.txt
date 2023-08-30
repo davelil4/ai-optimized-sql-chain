@@ -1,4 +1,4 @@
-  CREATE TABLE ProductSubcategory(
+CREATE TABLE ProductSubcategory(
     ProductSubcategoryID SERIAL NOT NULL, -- int
     ProductCategoryID INT NOT NULL,
     Name "Name" NOT NULL,
@@ -273,12 +273,6 @@ ALTER TABLE Production.WorkOrderRouting ADD
     (WorkOrderID, ProductID, OperationSequence);
 CLUSTER Production.WorkOrderRouting USING "PK_WorkOrderRouting_WorkOrderID_ProductID_OperationSequence";
 
-
-
--------------------------------------
--- FOREIGN KEYS
--------------------------------------
-
 ALTER TABLE Production.WorkOrderRouting ADD
     CONSTRAINT "FK_WorkOrderRouting_Location_LocationID" FOREIGN KEY
     (LocationID) REFERENCES Production.Location(LocationID);
@@ -286,9 +280,6 @@ ALTER TABLE Production.WorkOrderRouting ADD
     CONSTRAINT "FK_WorkOrderRouting_WorkOrder_WorkOrderID" FOREIGN KEY
     (WorkOrderID) REFERENCES Production.WorkOrder(WorkOrderID);
 
-
-
--------------------------------------
   CREATE TABLE ProductModelIllustration(
     ProductModelID INT NOT NULL,
     IllustrationID INT NOT NULL,

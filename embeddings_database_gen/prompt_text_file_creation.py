@@ -118,7 +118,7 @@ def create_schemata_files():
             for filename in os.listdir(os.path.join(os.getcwd(), f'schemata/{dir}')):
                 f.write(open(os.path.join(os.getcwd(), f'schemata/{dir}/{filename}'), 'r').read())
             f.close()
-        
+
 
 if __name__ == '__main__':
     create_schemata_files()

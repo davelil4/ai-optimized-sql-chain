@@ -1,4 +1,4 @@
-  CREATE TABLE SalesPersonQuotaHistory(
+CREATE TABLE SalesPersonQuotaHistory(
     BusinessEntityID INT NOT NULL,
     QuotaDate TIMESTAMP NOT NULL,
     SalesQuota numeric NOT NULL, -- money
@@ -211,9 +211,6 @@ ALTER TABLE Sales.Store ADD
 ALTER TABLE Sales.Store ADD
     CONSTRAINT "FK_Store_SalesPerson_SalesPersonID" FOREIGN KEY
     (SalesPersonID) REFERENCES Sales.SalesPerson(BusinessEntityID);
-
--- PRIMARY KEYS
--------------------------------------
 
   CREATE TABLE SalesOrderDetail(
     SalesOrderID INT NOT NULL,
