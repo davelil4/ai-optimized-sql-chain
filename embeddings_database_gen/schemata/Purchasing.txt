@@ -1,0 +1,97 @@
+  CREATE TABLE Vendor(
+    BusinessEntityID INT NOT NULL,
+    AccountNumber "AccountNumber" NOT NULL,
+    Name "Name" NOT NULL,
+    CreditRating smallint NOT NULL, -- tinyint
+   )
+ALTER TABLE Purchasing.Vendor ADD
+    CONSTRAINT "PK_Vendor_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Purchasing.Vendor USING "PK_Vendor_BusinessEntityID";
+
+ALTER TABLE Purchasing.Vendor ADD
+    CONSTRAINT "FK_Vendor_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+
+  CREATE TABLE PurchaseOrderHeader(
+    PurchaseOrderID SERIAL NOT NULL,  -- int
+    RevisionNumber smallint NOT NULL CONSTRAINT "DF_PurchaseOrderHeader_RevisionNumber" DEFAULT (0),  -- tinyint
+    Status smallint NOT NULL CONSTRAINT "DF_PurchaseOrderHeader_Status" DEFAULT (1),  -- tinyint
+    EmployeeID INT NOT NULL,
+    VendorID INT NOT NULL,
+    ShipMethodID INT NOT NULL,
+   )
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "PK_PurchaseOrderHeader_PurchaseOrderID" PRIMARY KEY
+    (PurchaseOrderID);
+CLUSTER Purchasing.PurchaseOrderHeader USING "PK_PurchaseOrderHeader_PurchaseOrderID";
+
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "FK_PurchaseOrderHeader_Employee_EmployeeID" FOREIGN KEY
+    (EmployeeID) REFERENCES HumanResources.Employee(BusinessEntityID);
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "FK_PurchaseOrderHeader_Vendor_VendorID" FOREIGN KEY
+    (VendorID) REFERENCES Purchasing.Vendor(BusinessEntityID);
+ALTER TABLE Purchasing.PurchaseOrderHeader ADD
+    CONSTRAINT "FK_PurchaseOrderHeader_ShipMethod_ShipMethodID" FOREIGN KEY
+    (ShipMethodID) REFERENCES Purchasing.ShipMethod(ShipMethodID);
+
+  CREATE TABLE PurchaseOrderDetail(
+    PurchaseOrderID INT NOT NULL,
+    PurchaseOrderDetailID SERIAL NOT NULL, -- int
+    DueDate TIMESTAMP NOT NULL,
+    OrderQty smallint NOT NULL,
+    ProductID INT NOT NULL,
+    UnitPrice numeric NOT NULL, -- money
+   )
+ALTER TABLE Purchasing.PurchaseOrderDetail ADD
+    CONSTRAINT "PK_PurchaseOrderDetail_PurchaseOrderID_PurchaseOrderDetailID" PRIMARY KEY
+    (PurchaseOrderID, PurchaseOrderDetailID);
+CLUSTER Purchasing.PurchaseOrderDetail USING "PK_PurchaseOrderDetail_PurchaseOrderID_PurchaseOrderDetailID";
+
+ALTER TABLE Purchasing.PurchaseOrderDetail ADD
+    CONSTRAINT "FK_PurchaseOrderDetail_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Purchasing.PurchaseOrderDetail ADD
+    CONSTRAINT "FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID" FOREIGN KEY
+    (PurchaseOrderID) REFERENCES Purchasing.PurchaseOrderHeader(PurchaseOrderID);
+
+  CREATE TABLE ProductVendor(
+    ProductID INT NOT NULL,
+    BusinessEntityID INT NOT NULL,
+    AverageLeadTime INT NOT NULL,
+    StandardPrice numeric NOT NULL, -- money
+    LastReceiptCost numeric NULL, -- money
+    LastReceiptDate TIMESTAMP NULL,
+    MinOrderQty INT NOT NULL,
+    MaxOrderQty INT NOT NULL,
+    OnOrderQty INT NULL,
+    UnitMeasureCode char(3) NOT NULL,
+   )
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "PK_ProductVendor_ProductID_BusinessEntityID" PRIMARY KEY
+    (ProductID, BusinessEntityID);
+CLUSTER Purchasing.ProductVendor USING "PK_ProductVendor_ProductID_BusinessEntityID";
+
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "FK_ProductVendor_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "FK_ProductVendor_UnitMeasure_UnitMeasureCode" FOREIGN KEY
+    (UnitMeasureCode) REFERENCES Production.UnitMeasure(UnitMeasureCode);
+ALTER TABLE Purchasing.ProductVendor ADD
+    CONSTRAINT "FK_ProductVendor_Vendor_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Purchasing.Vendor(BusinessEntityID);
+
+  CREATE TABLE ShipMethod(
+    ShipMethodID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    ShipBase numeric NOT NULL CONSTRAINT "DF_ShipMethod_ShipBase" DEFAULT (0.00), -- money
+    ShipRate numeric NOT NULL CONSTRAINT "DF_ShipMethod_ShipRate" DEFAULT (0.00), -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_ShipMethod_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Purchasing.ShipMethod ADD
+    CONSTRAINT "PK_ShipMethod_ShipMethodID" PRIMARY KEY
+    (ShipMethodID);
+CLUSTER Purchasing.ShipMethod USING "PK_ShipMethod_ShipMethodID";
+

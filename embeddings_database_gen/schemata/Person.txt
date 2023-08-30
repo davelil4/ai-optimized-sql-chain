@@ -1,0 +1,184 @@
+  CREATE TABLE ContactType(
+    ContactTypeID SERIAL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Person.ContactType ADD
+    CONSTRAINT "PK_ContactType_ContactTypeID" PRIMARY KEY
+    (ContactTypeID);
+CLUSTER Person.ContactType USING "PK_ContactType_ContactTypeID";
+
+  CREATE TABLE Address(
+    AddressID SERIAL, --  NOT FOR REPLICATION
+    AddressLine1 varchar(60) NOT NULL,
+    AddressLine2 varchar(60) NULL,
+    City varchar(30) NOT NULL,
+    StateProvinceID INT NOT NULL,
+    PostalCode varchar(15) NOT NULL,
+    SpatialLocation varchar(44) NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_Address_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.Address ADD
+    CONSTRAINT "PK_Address_AddressID" PRIMARY KEY
+    (AddressID);
+CLUSTER Person.Address USING "PK_Address_AddressID";
+
+ALTER TABLE Person.Address ADD
+    CONSTRAINT "FK_Address_StateProvince_StateProvinceID" FOREIGN KEY
+    (StateProvinceID) REFERENCES Person.StateProvince(StateProvinceID);
+
+  CREATE TABLE Person(
+    BusinessEntityID INT NOT NULL,
+    PersonType char(2) NOT NULL,
+   )
+ALTER TABLE Person.Person ADD
+    CONSTRAINT "PK_Person_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Person.Person USING "PK_Person_BusinessEntityID";
+
+ALTER TABLE Person.Person ADD
+    CONSTRAINT "FK_Person_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+
+  CREATE TABLE BusinessEntity(
+    BusinessEntityID SERIAL, --  NOT FOR REPLICATION
+    rowguid uuid NOT NULL CONSTRAINT "DF_BusinessEntity_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.BusinessEntity ADD
+    CONSTRAINT "PK_BusinessEntity_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Person.BusinessEntity USING "PK_BusinessEntity_BusinessEntityID";
+
+  CREATE TABLE PhoneNumberType(
+    PhoneNumberTypeID SERIAL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Person.PhoneNumberType ADD
+    CONSTRAINT "PK_PhoneNumberType_PhoneNumberTypeID" PRIMARY KEY
+    (PhoneNumberTypeID);
+CLUSTER Person.PhoneNumberType USING "PK_PhoneNumberType_PhoneNumberTypeID";
+
+  CREATE TABLE PersonPhone(
+    BusinessEntityID INT NOT NULL,
+    PhoneNumber "Phone" NOT NULL,
+    PhoneNumberTypeID INT NOT NULL,
+   )
+ALTER TABLE Person.PersonPhone ADD
+    CONSTRAINT "PK_PersonPhone_BusinessEntityID_PhoneNumber_PhoneNumberTypeID" PRIMARY KEY
+    (BusinessEntityID, PhoneNumber, PhoneNumberTypeID);
+CLUSTER Person.PersonPhone USING "PK_PersonPhone_BusinessEntityID_PhoneNumber_PhoneNumberTypeID";
+
+ALTER TABLE Person.PersonPhone ADD
+    CONSTRAINT "FK_PersonPhone_Person_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.Person(BusinessEntityID);
+ALTER TABLE Person.PersonPhone ADD
+    CONSTRAINT "FK_PersonPhone_PhoneNumberType_PhoneNumberTypeID" FOREIGN KEY
+    (PhoneNumberTypeID) REFERENCES Person.PhoneNumberType(PhoneNumberTypeID);
+
+  CREATE TABLE BusinessEntityAddress(
+    BusinessEntityID INT NOT NULL,
+    AddressID INT NOT NULL,
+    AddressTypeID INT NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_BusinessEntityAddress_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "PK_BusinessEntityAddress_BusinessEntityID_AddressID_AddressType" PRIMARY KEY
+    (BusinessEntityID, AddressID, AddressTypeID);
+CLUSTER Person.BusinessEntityAddress USING "PK_BusinessEntityAddress_BusinessEntityID_AddressID_AddressType";
+
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "FK_BusinessEntityAddress_Address_AddressID" FOREIGN KEY
+    (AddressID) REFERENCES Person.Address(AddressID);
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "FK_BusinessEntityAddress_AddressType_AddressTypeID" FOREIGN KEY
+    (AddressTypeID) REFERENCES Person.AddressType(AddressTypeID);
+ALTER TABLE Person.BusinessEntityAddress ADD
+    CONSTRAINT "FK_BusinessEntityAddress_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+
+  CREATE TABLE CountryRegion(
+    CountryRegionCode varchar(3) NOT NULL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Person.CountryRegion ADD
+    CONSTRAINT "PK_CountryRegion_CountryRegionCode" PRIMARY KEY
+    (CountryRegionCode);
+CLUSTER Person.CountryRegion USING "PK_CountryRegion_CountryRegionCode";
+
+  CREATE TABLE EmailAddress(
+    BusinessEntityID INT NOT NULL,
+    EmailAddressID SERIAL,
+    EmailAddress varchar(50) NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_EmailAddress_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.EmailAddress ADD
+    CONSTRAINT "PK_EmailAddress_BusinessEntityID_EmailAddressID" PRIMARY KEY
+    (BusinessEntityID, EmailAddressID);
+CLUSTER Person.EmailAddress USING "PK_EmailAddress_BusinessEntityID_EmailAddressID";
+
+ALTER TABLE Person.EmailAddress ADD
+    CONSTRAINT "FK_EmailAddress_Person_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.Person(BusinessEntityID);
+
+  CREATE TABLE StateProvince(
+    StateProvinceID SERIAL,
+    StateProvinceCode char(3) NOT NULL,
+    CountryRegionCode varchar(3) NOT NULL,
+   )
+ALTER TABLE Person.StateProvince ADD
+    CONSTRAINT "PK_StateProvince_StateProvinceID" PRIMARY KEY
+    (StateProvinceID);
+CLUSTER Person.StateProvince USING "PK_StateProvince_StateProvinceID";
+
+ALTER TABLE Person.StateProvince ADD
+    CONSTRAINT "FK_StateProvince_CountryRegion_CountryRegionCode" FOREIGN KEY
+    (CountryRegionCode) REFERENCES Person.CountryRegion(CountryRegionCode);
+ALTER TABLE Person.StateProvince ADD
+    CONSTRAINT "FK_StateProvince_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+
+  CREATE TABLE BusinessEntityContact(
+    BusinessEntityID INT NOT NULL,
+    PersonID INT NOT NULL,
+    ContactTypeID INT NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_BusinessEntityContact_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "PK_BusinessEntityContact_BusinessEntityID_PersonID_ContactTypeI" PRIMARY KEY
+    (BusinessEntityID, PersonID, ContactTypeID);
+CLUSTER Person.BusinessEntityContact USING "PK_BusinessEntityContact_BusinessEntityID_PersonID_ContactTypeI";
+
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "FK_BusinessEntityContact_Person_PersonID" FOREIGN KEY
+    (PersonID) REFERENCES Person.Person(BusinessEntityID);
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "FK_BusinessEntityContact_ContactType_ContactTypeID" FOREIGN KEY
+    (ContactTypeID) REFERENCES Person.ContactType(ContactTypeID);
+ALTER TABLE Person.BusinessEntityContact ADD
+    CONSTRAINT "FK_BusinessEntityContact_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+
+  CREATE TABLE Password(
+    BusinessEntityID INT NOT NULL,
+    PasswordHash VARCHAR(128) NOT NULL,
+    PasswordSalt VARCHAR(10) NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_Password_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.Password ADD
+    CONSTRAINT "PK_Password_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Person.Password USING "PK_Password_BusinessEntityID";
+
+ALTER TABLE Person.Password ADD
+    CONSTRAINT "FK_Password_Person_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.Person(BusinessEntityID);
+
+  CREATE TABLE AddressType(
+    AddressTypeID SERIAL,
+    Name "Name" NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_AddressType_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Person.AddressType ADD
+    CONSTRAINT "PK_AddressType_AddressTypeID" PRIMARY KEY
+    (AddressTypeID);
+CLUSTER Person.AddressType USING "PK_AddressType_AddressTypeID";
+

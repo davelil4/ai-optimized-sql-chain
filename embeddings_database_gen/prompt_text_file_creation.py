@@ -111,6 +111,14 @@ def create_schemata():
     
     file.close()
 
+def create_schemata_files():
+    for subdir, dirs, files in os.walk(os.path.join(os.getcwd(), 'schemata')):
+        for dir in dirs:
+            f = open(os.path.join(os.getcwd(), f'schemata/{dir}.txt'), 'w')
+            for filename in os.listdir(os.path.join(os.getcwd(), f'schemata/{dir}')):
+                f.write(open(os.path.join(os.getcwd(), f'schemata/{dir}/{filename}'), 'r').read())
+            f.close()
+        
 
 if __name__ == '__main__':
-    create_schemata()
+    create_schemata_files()

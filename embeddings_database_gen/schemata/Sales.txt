@@ -1,0 +1,337 @@
+  CREATE TABLE SalesPersonQuotaHistory(
+    BusinessEntityID INT NOT NULL,
+    QuotaDate TIMESTAMP NOT NULL,
+    SalesQuota numeric NOT NULL, -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesPersonQuotaHistory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesPersonQuotaHistory ADD
+    CONSTRAINT "PK_SalesPersonQuotaHistory_BusinessEntityID_QuotaDate" PRIMARY KEY
+    (BusinessEntityID, QuotaDate); -- ProductCategoryID);
+CLUSTER Sales.SalesPersonQuotaHistory USING "PK_SalesPersonQuotaHistory_BusinessEntityID_QuotaDate";
+
+ALTER TABLE Sales.SalesPersonQuotaHistory ADD
+    CONSTRAINT "FK_SalesPersonQuotaHistory_SalesPerson_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+
+  CREATE TABLE CreditCard(
+    CreditCardID SERIAL NOT NULL, -- int
+    CardType varchar(50) NOT NULL,
+    CardNumber varchar(25) NOT NULL,
+    ExpMonth smallint NOT NULL, -- tinyint
+    ExpYear smallint NOT NULL,
+   )
+ALTER TABLE Sales.CreditCard ADD
+    CONSTRAINT "PK_CreditCard_CreditCardID" PRIMARY KEY
+    (CreditCardID);
+CLUSTER Sales.CreditCard USING "PK_CreditCard_CreditCardID";
+
+  CREATE TABLE PersonCreditCard(
+    BusinessEntityID INT NOT NULL,
+    CreditCardID INT NOT NULL,
+   )
+ALTER TABLE Sales.PersonCreditCard ADD
+    CONSTRAINT "PK_PersonCreditCard_BusinessEntityID_CreditCardID" PRIMARY KEY
+    (BusinessEntityID, CreditCardID);
+CLUSTER Sales.PersonCreditCard USING "PK_PersonCreditCard_BusinessEntityID_CreditCardID";
+
+ALTER TABLE Sales.PersonCreditCard ADD
+    CONSTRAINT "FK_PersonCreditCard_Person_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.Person(BusinessEntityID);
+ALTER TABLE Sales.PersonCreditCard ADD
+    CONSTRAINT "FK_PersonCreditCard_CreditCard_CreditCardID" FOREIGN KEY
+    (CreditCardID) REFERENCES Sales.CreditCard(CreditCardID);
+
+  CREATE TABLE CurrencyRate(
+    CurrencyRateID SERIAL NOT NULL, -- int
+    CurrencyRateDate TIMESTAMP NOT NULL,   
+    FromCurrencyCode char(3) NOT NULL,
+    ToCurrencyCode char(3) NOT NULL,
+    AverageRate numeric NOT NULL, -- money
+    EndOfDayRate numeric NOT NULL,  -- money
+   )
+ALTER TABLE Sales.CurrencyRate ADD
+    CONSTRAINT "PK_CurrencyRate_CurrencyRateID" PRIMARY KEY
+    (CurrencyRateID);
+CLUSTER Sales.CurrencyRate USING "PK_CurrencyRate_CurrencyRateID";
+
+ALTER TABLE Sales.CurrencyRate ADD
+    CONSTRAINT "FK_CurrencyRate_Currency_FromCurrencyCode" FOREIGN KEY
+    (FromCurrencyCode) REFERENCES Sales.Currency(CurrencyCode);
+ALTER TABLE Sales.CurrencyRate ADD
+    CONSTRAINT "FK_CurrencyRate_Currency_ToCurrencyCode" FOREIGN KEY
+    (ToCurrencyCode) REFERENCES Sales.Currency(CurrencyCode);
+
+  CREATE TABLE SalesPerson(
+    BusinessEntityID INT NOT NULL,
+    TerritoryID INT NULL,
+    SalesQuota numeric NULL, -- money
+    Bonus numeric NOT NULL CONSTRAINT "DF_SalesPerson_Bonus" DEFAULT (0.00), -- money
+    CommissionPct numeric NOT NULL CONSTRAINT "DF_SalesPerson_CommissionPct" DEFAULT (0.00), -- smallmoney -- money
+    SalesYTD numeric NOT NULL CONSTRAINT "DF_SalesPerson_SalesYTD" DEFAULT (0.00), -- money
+    SalesLastYear numeric NOT NULL CONSTRAINT "DF_SalesPerson_SalesLastYear" DEFAULT (0.00), -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesPerson_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesPerson ADD
+    CONSTRAINT "PK_SalesPerson_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Sales.SalesPerson USING "PK_SalesPerson_BusinessEntityID";
+
+ALTER TABLE Sales.SalesPerson ADD
+    CONSTRAINT "FK_SalesPerson_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+ALTER TABLE Sales.SalesPerson ADD
+    CONSTRAINT "FK_SalesPerson_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+
+  CREATE TABLE SalesTerritory(
+    TerritoryID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    CountryRegionCode varchar(3) NOT NULL,
+    "group" varchar(50) NOT NULL, -- Group
+    SalesYTD numeric NOT NULL CONSTRAINT "DF_SalesTerritory_SalesYTD" DEFAULT (0.00), -- money
+    SalesLastYear numeric NOT NULL CONSTRAINT "DF_SalesTerritory_SalesLastYear" DEFAULT (0.00), -- money
+    CostYTD numeric NOT NULL CONSTRAINT "DF_SalesTerritory_CostYTD" DEFAULT (0.00), -- money
+    CostLastYear numeric NOT NULL CONSTRAINT "DF_SalesTerritory_CostLastYear" DEFAULT (0.00), -- money
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesTerritory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesTerritory ADD
+    CONSTRAINT "PK_SalesTerritory_TerritoryID" PRIMARY KEY
+    (TerritoryID);
+CLUSTER Sales.SalesTerritory USING "PK_SalesTerritory_TerritoryID";
+
+ALTER TABLE Sales.SalesTerritory ADD
+    CONSTRAINT "FK_SalesTerritory_CountryRegion_CountryRegionCode" FOREIGN KEY
+    (CountryRegionCode) REFERENCES Person.CountryRegion(CountryRegionCode);
+
+  CREATE TABLE ShoppingCartItem(
+    ShoppingCartItemID SERIAL NOT NULL, -- int
+    ShoppingCartID varchar(50) NOT NULL,
+   )
+ALTER TABLE Sales.ShoppingCartItem ADD
+    CONSTRAINT "PK_ShoppingCartItem_ShoppingCartItemID" PRIMARY KEY
+    (ShoppingCartItemID);
+CLUSTER Sales.ShoppingCartItem USING "PK_ShoppingCartItem_ShoppingCartItemID";
+
+ALTER TABLE Sales.ShoppingCartItem ADD
+    CONSTRAINT "FK_ShoppingCartItem_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+
+  CREATE TABLE CountryRegionCurrency(
+    CountryRegionCode varchar(3) NOT NULL,
+    CurrencyCode char(3) NOT NULL,
+   )
+ALTER TABLE Sales.CountryRegionCurrency ADD
+    CONSTRAINT "PK_CountryRegionCurrency_CountryRegionCode_CurrencyCode" PRIMARY KEY
+    (CountryRegionCode, CurrencyCode);
+CLUSTER Sales.CountryRegionCurrency USING "PK_CountryRegionCurrency_CountryRegionCode_CurrencyCode";
+
+ALTER TABLE Sales.CountryRegionCurrency ADD
+    CONSTRAINT "FK_CountryRegionCurrency_CountryRegion_CountryRegionCode" FOREIGN KEY
+    (CountryRegionCode) REFERENCES Person.CountryRegion(CountryRegionCode);
+ALTER TABLE Sales.CountryRegionCurrency ADD
+    CONSTRAINT "FK_CountryRegionCurrency_Currency_CurrencyCode" FOREIGN KEY
+    (CurrencyCode) REFERENCES Sales.Currency(CurrencyCode);
+
+  CREATE TABLE SalesTerritoryHistory(
+    BusinessEntityID INT NOT NULL,  -- A sales person
+    TerritoryID INT NOT NULL,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate TIMESTAMP NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesTerritoryHistory_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesTerritoryHistory ADD
+    CONSTRAINT "PK_SalesTerritoryHistory_BusinessEntityID_StartDate_TerritoryID" PRIMARY KEY
+    (BusinessEntityID,  --Sales person,
+     StartDate, TerritoryID);
+CLUSTER Sales.SalesTerritoryHistory USING "PK_SalesTerritoryHistory_BusinessEntityID_StartDate_TerritoryID";
+
+ALTER TABLE Sales.SalesTerritoryHistory ADD
+    CONSTRAINT "FK_SalesTerritoryHistory_SalesPerson_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+ALTER TABLE Sales.SalesTerritoryHistory ADD
+    CONSTRAINT "FK_SalesTerritoryHistory_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+
+  CREATE TABLE SalesReason(
+    SalesReasonID SERIAL NOT NULL, -- int
+    Name "Name" NOT NULL,
+    ReasonType "Name" NOT NULL,
+   )
+ALTER TABLE Sales.SalesReason ADD
+    CONSTRAINT "PK_SalesReason_SalesReasonID" PRIMARY KEY
+    (SalesReasonID);
+CLUSTER Sales.SalesReason USING "PK_SalesReason_SalesReasonID";
+
+  CREATE TABLE SpecialOffer(
+    SpecialOfferID SERIAL NOT NULL, -- int
+    Description varchar(255) NOT NULL,
+    DiscountPct numeric NOT NULL CONSTRAINT "DF_SpecialOffer_DiscountPct" DEFAULT (0.00), -- smallmoney -- money
+    Type varchar(50) NOT NULL,
+    Category varchar(50) NOT NULL,
+    StartDate TIMESTAMP NOT NULL,
+    EndDate TIMESTAMP NOT NULL,
+   )
+ALTER TABLE Sales.SpecialOffer ADD
+    CONSTRAINT "PK_SpecialOffer_SpecialOfferID" PRIMARY KEY
+    (SpecialOfferID);
+CLUSTER Sales.SpecialOffer USING "PK_SpecialOffer_SpecialOfferID";
+
+  CREATE TABLE SpecialOfferProduct(
+    SpecialOfferID INT NOT NULL,
+    ProductID INT NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_SpecialOfferProduct_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SpecialOfferProduct ADD
+    CONSTRAINT "PK_SpecialOfferProduct_SpecialOfferID_ProductID" PRIMARY KEY
+    (SpecialOfferID, ProductID);
+CLUSTER Sales.SpecialOfferProduct USING "PK_SpecialOfferProduct_SpecialOfferID_ProductID";
+
+ALTER TABLE Sales.SpecialOfferProduct ADD
+    CONSTRAINT "FK_SpecialOfferProduct_Product_ProductID" FOREIGN KEY
+    (ProductID) REFERENCES Production.Product(ProductID);
+ALTER TABLE Sales.SpecialOfferProduct ADD
+    CONSTRAINT "FK_SpecialOfferProduct_SpecialOffer_SpecialOfferID" FOREIGN KEY
+    (SpecialOfferID) REFERENCES Sales.SpecialOffer(SpecialOfferID);
+
+  CREATE TABLE Store(
+    BusinessEntityID INT NOT NULL,
+    Name "Name" NOT NULL,
+    SalesPersonID INT NULL,
+    Demographics XML NULL, -- XML(Sales.StoreSurveySchemaCollection)
+    rowguid uuid NOT NULL CONSTRAINT "DF_Store_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.Store ADD
+    CONSTRAINT "PK_Store_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER Sales.Store USING "PK_Store_BusinessEntityID";
+
+ALTER TABLE Sales.Store ADD
+    CONSTRAINT "FK_Store_BusinessEntity_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.BusinessEntity(BusinessEntityID);
+ALTER TABLE Sales.Store ADD
+    CONSTRAINT "FK_Store_SalesPerson_SalesPersonID" FOREIGN KEY
+    (SalesPersonID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+
+-- PRIMARY KEYS
+-------------------------------------
+
+  CREATE TABLE SalesOrderDetail(
+    SalesOrderID INT NOT NULL,
+    SalesOrderDetailID SERIAL NOT NULL, -- int
+    CarrierTrackingNumber varchar(25) NULL,
+    OrderQty smallint NOT NULL,
+    ProductID INT NOT NULL,
+    SpecialOfferID INT NOT NULL,
+    UnitPrice numeric NOT NULL, -- money
+    UnitPriceDiscount numeric NOT NULL CONSTRAINT "DF_SalesOrderDetail_UnitPriceDiscount" DEFAULT (0.0), -- money
+   )
+ALTER TABLE Sales.SalesOrderDetail ADD
+    CONSTRAINT "PK_SalesOrderDetail_SalesOrderID_SalesOrderDetailID" PRIMARY KEY
+    (SalesOrderID, SalesOrderDetailID);
+CLUSTER Sales.SalesOrderDetail USING "PK_SalesOrderDetail_SalesOrderID_SalesOrderDetailID";
+
+ALTER TABLE Sales.SalesOrderDetail ADD
+    CONSTRAINT "FK_SalesOrderDetail_SalesOrderHeader_SalesOrderID" FOREIGN KEY
+    (SalesOrderID) REFERENCES Sales.SalesOrderHeader(SalesOrderID) ON DELETE CASCADE;
+ALTER TABLE Sales.SalesOrderDetail ADD
+    CONSTRAINT "FK_SalesOrderDetail_SpecialOfferProduct_SpecialOfferIDProductID" FOREIGN KEY
+    (SpecialOfferID, ProductID) REFERENCES Sales.SpecialOfferProduct(SpecialOfferID, ProductID);
+
+  CREATE TABLE SalesOrderHeaderSalesReason(
+    SalesOrderID INT NOT NULL,
+    SalesReasonID INT NOT NULL,
+   )
+ALTER TABLE Sales.SalesOrderHeaderSalesReason ADD
+    CONSTRAINT "PK_SalesOrderHeaderSalesReason_SalesOrderID_SalesReasonID" PRIMARY KEY
+    (SalesOrderID, SalesReasonID);
+CLUSTER Sales.SalesOrderHeaderSalesReason USING "PK_SalesOrderHeaderSalesReason_SalesOrderID_SalesReasonID";
+
+ALTER TABLE Sales.SalesOrderHeaderSalesReason ADD
+    CONSTRAINT "FK_SalesOrderHeaderSalesReason_SalesReason_SalesReasonID" FOREIGN KEY
+    (SalesReasonID) REFERENCES Sales.SalesReason(SalesReasonID);
+ALTER TABLE Sales.SalesOrderHeaderSalesReason ADD
+    CONSTRAINT "FK_SalesOrderHeaderSalesReason_SalesOrderHeader_SalesOrderID" FOREIGN KEY
+    (SalesOrderID) REFERENCES Sales.SalesOrderHeader(SalesOrderID) ON DELETE CASCADE;
+
+  CREATE TABLE Customer(
+    CustomerID SERIAL NOT NULL, --  NOT FOR REPLICATION -- int
+    -- A customer may either be a person, a store, or a person who works for a store
+    PersonID INT NULL, -- If this customer represents a person, this is non-null
+    StoreID INT NULL,  -- If the customer is a store, or is associated with a store then this is non-null.
+    TerritoryID INT NULL,
+   )
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "PK_Customer_CustomerID" PRIMARY KEY
+    (CustomerID);
+CLUSTER Sales.Customer USING "PK_Customer_CustomerID";
+
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "FK_Customer_Person_PersonID" FOREIGN KEY
+    (PersonID) REFERENCES Person.Person(BusinessEntityID);
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "FK_Customer_Store_StoreID" FOREIGN KEY
+    (StoreID) REFERENCES Sales.Store(BusinessEntityID);
+ALTER TABLE Sales.Customer ADD
+    CONSTRAINT "FK_Customer_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+
+  CREATE TABLE SalesOrderHeader(
+    SalesOrderID SERIAL NOT NULL, --  NOT FOR REPLICATION -- int
+    RevisionNumber smallint NOT NULL CONSTRAINT "DF_SalesOrderHeader_RevisionNumber" DEFAULT (0), -- tinyint
+   )
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "PK_SalesOrderHeader_SalesOrderID" PRIMARY KEY
+    (SalesOrderID);
+CLUSTER Sales.SalesOrderHeader USING "PK_SalesOrderHeader_SalesOrderID";
+
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_Address_BillToAddressID" FOREIGN KEY
+    (BillToAddressID) REFERENCES Person.Address(AddressID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_Address_ShipToAddressID" FOREIGN KEY
+    (ShipToAddressID) REFERENCES Person.Address(AddressID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_CreditCard_CreditCardID" FOREIGN KEY
+    (CreditCardID) REFERENCES Sales.CreditCard(CreditCardID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_CurrencyRate_CurrencyRateID" FOREIGN KEY
+    (CurrencyRateID) REFERENCES Sales.CurrencyRate(CurrencyRateID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_Customer_CustomerID" FOREIGN KEY
+    (CustomerID) REFERENCES Sales.Customer(CustomerID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_SalesPerson_SalesPersonID" FOREIGN KEY
+    (SalesPersonID) REFERENCES Sales.SalesPerson(BusinessEntityID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_ShipMethod_ShipMethodID" FOREIGN KEY
+    (ShipMethodID) REFERENCES Purchasing.ShipMethod(ShipMethodID);
+ALTER TABLE Sales.SalesOrderHeader ADD
+    CONSTRAINT "FK_SalesOrderHeader_SalesTerritory_TerritoryID" FOREIGN KEY
+    (TerritoryID) REFERENCES Sales.SalesTerritory(TerritoryID);
+
+  CREATE TABLE SalesTaxRate(
+    SalesTaxRateID SERIAL NOT NULL, -- int
+    StateProvinceID INT NOT NULL,
+    TaxType smallint NOT NULL, -- tinyint
+    TaxRate numeric NOT NULL CONSTRAINT "DF_SalesTaxRate_TaxRate" DEFAULT (0.00), -- smallmoney -- money
+    Name "Name" NOT NULL,
+    rowguid uuid NOT NULL CONSTRAINT "DF_SalesTaxRate_rowguid" DEFAULT (uuid_generate_v1()), -- ROWGUIDCOL
+   )
+ALTER TABLE Sales.SalesTaxRate ADD
+    CONSTRAINT "PK_SalesTaxRate_SalesTaxRateID" PRIMARY KEY
+    (SalesTaxRateID);
+CLUSTER Sales.SalesTaxRate USING "PK_SalesTaxRate_SalesTaxRateID";
+
+ALTER TABLE Sales.SalesTaxRate ADD
+    CONSTRAINT "FK_SalesTaxRate_StateProvince_StateProvinceID" FOREIGN KEY
+    (StateProvinceID) REFERENCES Person.StateProvince(StateProvinceID);
+
+  CREATE TABLE Currency(
+    CurrencyCode char(3) NOT NULL,
+    Name "Name" NOT NULL,
+   )
+ALTER TABLE Sales.Currency ADD
+    CONSTRAINT "PK_Currency_CurrencyCode" PRIMARY KEY
+    (CurrencyCode);
+CLUSTER Sales.Currency USING "PK_Currency_CurrencyCode";
+

@@ -1,0 +1,87 @@
+  CREATE TABLE EmployeeDepartmentHistory(
+    BusinessEntityID INT NOT NULL,
+    DepartmentID smallint NOT NULL,
+    ShiftID smallint NOT NULL, -- tinyint
+    StartDate DATE NOT NULL,
+    EndDate DATE NULL,
+   )
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "PK_EmployeeDepartmentHistory_BusinessEntityID_StartDate_Departm" PRIMARY KEY
+    (BusinessEntityID, StartDate, DepartmentID, ShiftID);
+CLUSTER HumanResources.EmployeeDepartmentHistory USING "PK_EmployeeDepartmentHistory_BusinessEntityID_StartDate_Departm";
+
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "FK_EmployeeDepartmentHistory_Department_DepartmentID" FOREIGN KEY
+    (DepartmentID) REFERENCES HumanResources.Department(DepartmentID);
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "FK_EmployeeDepartmentHistory_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+ALTER TABLE HumanResources.EmployeeDepartmentHistory ADD
+    CONSTRAINT "FK_EmployeeDepartmentHistory_Shift_ShiftID" FOREIGN KEY
+    (ShiftID) REFERENCES HumanResources.Shift(ShiftID);
+
+  CREATE TABLE Shift(
+    ShiftID SERIAL NOT NULL, -- tinyint
+    Name "Name" NOT NULL,
+    StartTime time NOT NULL,
+    EndTime time NOT NULL,
+   )
+ALTER TABLE HumanResources.Shift ADD
+    CONSTRAINT "PK_Shift_ShiftID" PRIMARY KEY
+    (ShiftID);
+CLUSTER HumanResources.Shift USING "PK_Shift_ShiftID";
+
+  CREATE TABLE JobCandidate(
+    JobCandidateID SERIAL NOT NULL, -- int
+    BusinessEntityID INT NULL,
+    Resume XML NULL, -- XML(HRResumeSchemaCollection)
+   )
+ALTER TABLE HumanResources.JobCandidate ADD
+    CONSTRAINT "PK_JobCandidate_JobCandidateID" PRIMARY KEY
+    (JobCandidateID);
+CLUSTER HumanResources.JobCandidate USING "PK_JobCandidate_JobCandidateID";
+
+ALTER TABLE HumanResources.JobCandidate ADD
+    CONSTRAINT "FK_JobCandidate_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+
+  CREATE TABLE Employee(
+    BusinessEntityID INT NOT NULL,
+    NationalIDNumber varchar(15) NOT NULL,
+    LoginID varchar(256) NOT NULL,    
+    Org varchar NULL,-- hierarchyid, will become OrganizationNode
+   )
+ALTER TABLE HumanResources.Employee ADD
+    CONSTRAINT "PK_Employee_BusinessEntityID" PRIMARY KEY
+    (BusinessEntityID);
+CLUSTER HumanResources.Employee USING "PK_Employee_BusinessEntityID";
+
+ALTER TABLE HumanResources.Employee ADD
+    CONSTRAINT "FK_Employee_Person_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES Person.Person(BusinessEntityID);
+
+  CREATE TABLE Department(
+    DepartmentID SERIAL NOT NULL, -- smallint
+    Name "Name" NOT NULL,
+    GroupName "Name" NOT NULL,
+   )
+ALTER TABLE HumanResources.Department ADD
+    CONSTRAINT "PK_Department_DepartmentID" PRIMARY KEY
+    (DepartmentID);
+CLUSTER HumanResources.Department USING "PK_Department_DepartmentID";
+
+  CREATE TABLE EmployeePayHistory(
+    BusinessEntityID INT NOT NULL,
+    RateChangeDate TIMESTAMP NOT NULL,
+    Rate numeric NOT NULL, -- money
+    PayFrequency smallint NOT NULL,  -- tinyint
+   )
+ALTER TABLE HumanResources.EmployeePayHistory ADD
+    CONSTRAINT "PK_EmployeePayHistory_BusinessEntityID_RateChangeDate" PRIMARY KEY
+    (BusinessEntityID, RateChangeDate);
+CLUSTER HumanResources.EmployeePayHistory USING "PK_EmployeePayHistory_BusinessEntityID_RateChangeDate";
+
+ALTER TABLE HumanResources.EmployeePayHistory ADD
+    CONSTRAINT "FK_EmployeePayHistory_Employee_BusinessEntityID" FOREIGN KEY
+    (BusinessEntityID) REFERENCES HumanResources.Employee(BusinessEntityID);
+
