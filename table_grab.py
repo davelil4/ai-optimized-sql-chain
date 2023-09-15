@@ -26,4 +26,7 @@ def search_table(user_query, top_n=3):
 
 def getTableContext(df: pd.DataFrame):
     return "".join(df['context'].tolist())
+
+def getContext(question):
+    return getTableContext(search_table(question)) + "---\n\n" + open(os.path.join(os.getcwd(), "gen.txt")).read()
     
