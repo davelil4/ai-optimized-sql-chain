@@ -1,4 +1,22 @@
 import os
+from enum import Enum
+
+class Schemata(Enum) :
+    HR=1
+    PERSON=2
+    PRODUCTION=3
+    PURCHASING=4
+    SALES=5
+    EMPTY=6
+
+class Section(Enum):
+    SCHEMATA=1
+    COMMENTS=2
+    PKEYS=3
+    FKEYS=4
+    VIEWS=5
+    EMPTY=6
+
 
 def create_schemata():
     file = open(os.path.join(os.getcwd(), 'database.sql'), 'r')
@@ -110,6 +128,43 @@ def create_schemata():
             
     
     file.close()
+
+def create_schemata_case():
+    section = None
+    schemata = None
+    
+    schem_map = {
+        'HumanResources': "",
+        'Person': "",
+        'Production': "",
+        'Purchasing': "",
+        'Sales': ""
+    }
+    
+    file = open(os.path.join(os.getcwd(), 'database.sql'), 'r')
+    
+    for line in file.readlines():
+        
+        if not section:
+            if 'Five schemas' in line:
+                section = Section.SCHEMATA
+            else:
+                continue
+        
+        if section == Section.SCHEMATA:
+            if not schemata:
+                if  'Person' in line:
+                    schemata = Schemata.PERSON
+                else:
+                    continue
+            
+            if schemata == Schemata.PERSON:
+                
+    
+    
+    
+    
+    pass
 
 def create_schemata_files():
     for subdir, dirs, files in os.walk(os.path.join(os.getcwd(), 'schemata')):
